@@ -73,11 +73,11 @@ public class DatasourceInMemoryServiceHelper {
 
     DatabaseDialectService dialectService = new DatabaseDialectService();
     IDatabaseDialect dialect = dialectService.getDialect( connection );
-    String driverClass = null;
-    if ( connection.getDatabaseType().getShortName().equals( "GENERIC" ) ) {
-      driverClass = connection.getAttributes().get( GenericDatabaseDialect.ATTRIBUTE_CUSTOM_DRIVER_CLASS );
-    } else {
-      driverClass = dialect.getNativeDriver();
+    String driverClass = connection.getAttributes().get( GenericDatabaseDialect.ATTRIBUTE_CUSTOM_DRIVER_CLASS );
+    if ( !connection.getDatabaseType().getShortName().equals( "GENERIC" ) ) {
+      if ( driverClass == null ) {
+        driverClass = dialect.getNativeDriver();
+      }
     }
     if ( StringUtils.isEmpty( driverClass ) ) {
       logger.error( Messages.getErrorString( "DatasourceInMemoryServiceHelper.ERROR_0001_CONNECTION_ATTEMPT_FAILED" ) ); //$NON-NLS-1$
@@ -145,10 +145,9 @@ public class DatasourceInMemoryServiceHelper {
       connection = service.getConnectionByName( connectionName );
       DatabaseDialectService dialectService = new DatabaseDialectService();
       IDatabaseDialect dialect = dialectService.getDialect( connection );
-      String driverClass = null;
-      if ( connection.getDatabaseType().getShortName().equals( "GENERIC" ) ) {
-        driverClass = connection.getAttributes().get( GenericDatabaseDialect.ATTRIBUTE_CUSTOM_DRIVER_CLASS );
-      } else {
+
+      String driverClass = connection.getAttributes().get( GenericDatabaseDialect.ATTRIBUTE_CUSTOM_DRIVER_CLASS );
+      if ( !connection.getDatabaseType().getShortName().equals( "GENERIC" ) && driverClass == null ) {
         driverClass = dialect.getNativeDriver();
       }
 

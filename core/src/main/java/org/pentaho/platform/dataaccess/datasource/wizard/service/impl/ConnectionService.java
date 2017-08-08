@@ -145,10 +145,8 @@ public class ConnectionService {
   public IDatabaseConnection createDatabaseConnection( @QueryParam( "driver" ) String driver,
       @QueryParam( "url" ) String url ) {
     for ( IDatabaseDialect dialect : dialectService.getDatabaseDialects() ) {
-      if ( dialect.getNativeDriver() != null && dialect.getNativeDriver().equals( driver ) ) {
-        if ( dialect.getNativeJdbcPre() != null && url.startsWith( dialect.getNativeJdbcPre() ) ) {
-          return dialect.createNativeConnection( url );
-        }
+      if ( dialect.getNativeJdbcPre() != null && url.startsWith( dialect.getNativeJdbcPre() ) ) {
+        return dialect.createNativeConnection( url );
       }
     }
 

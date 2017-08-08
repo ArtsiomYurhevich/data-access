@@ -303,11 +303,10 @@ public class ConnectionServiceImpl extends PentahoBase implements IConnectionSer
         connection.setPassword( "" ); //$NON-NLS-1$
       }
       IDatabaseDialect dialect = dialectService.getDialect( connection );
-      String driverClass = null;
 
-      if ( connection.getDatabaseType().getShortName().equals( "GENERIC" ) ) {
-        driverClass = connection.getAttributes().get( GenericDatabaseDialect.ATTRIBUTE_CUSTOM_DRIVER_CLASS );
-      } else {
+      String driverClass = connection.getAttributes().get( GenericDatabaseDialect.ATTRIBUTE_CUSTOM_DRIVER_CLASS );
+
+      if ( !connection.getDatabaseType().getShortName().equals( "GENERIC" ) && driverClass == null ) {
         driverClass = dialect.getNativeDriver();
       }
       IPentahoConnection pentahoConnection = null;
